@@ -87,7 +87,7 @@ void i2c_capture(void)
 
 		buf[ i >> 3 ] |= MSG_START << ( i & 7 );
 
-		while ( (last = (PORTD&INMASK)) & SCL_BIT);
+		while ( PORTD & SCL_BIT );
 
 		for(;;)
 		{
@@ -97,7 +97,7 @@ void i2c_capture(void)
 			if (state & SCL_BIT) /* end of message */
 				break;
 
-			buf[ i >> 3 ] |= (state & SDA_BIT ? 1 : 0) << ( i & 7 );
+			buf[ i >> 3 ] |= (last & SDA_BIT ? 1 : 0) << ( i & 7 );
 			i+=2;
 
 			if (i >= bufsize)
